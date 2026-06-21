@@ -42,13 +42,23 @@ const blogSchema = new mongoose.Schema(
   { _id: true }
 );
 
+const momentSchema = new mongoose.Schema(
+  {
+    title: String,
+    caption: String,
+    image: String
+  },
+  { _id: true }
+);
+
 const siteContentSchema = new mongoose.Schema(
   {
     profile: profileSchema,
     stats: [statsSchema],
     services: [String],
     videos: [videoSchema],
-    blogs: [blogSchema]
+    blogs: [blogSchema],
+    moments: [momentSchema]
   },
   { timestamps: true }
 );

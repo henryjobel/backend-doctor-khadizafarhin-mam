@@ -14,13 +14,33 @@ const __dirname = path.dirname(__filename);
 const app = express();
 const port = process.env.PORT || 5000;
 
+const envOrigins = [process.env.CLIENT_ORIGIN, process.env.CLIENT_ORIGINS]
+  .filter(Boolean)
+  .flatMap((origin) => origin.split(","))
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 const allowedOrigins = [
-  process.env.CLIENT_ORIGIN,
+  ...envOrigins,
   "http://localhost:5173",
-  "http://127.0.0.1:5173"
+  "http://127.0.0.1:5173",
+  "http://localhost:5174",
+  "http://127.0.0.1:5174"
 ].filter(Boolean);
 
-app.use(cors({ origin: allowedOrigins }));
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+
+      callback(new Error(`CORS blocked for origin: ${origin}`));
+    },
+    credentials: true
+  })
+);
 app.use(express.json({ limit: "2mb" }));
 app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")));
 
