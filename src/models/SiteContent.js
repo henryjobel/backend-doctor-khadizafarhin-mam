@@ -32,11 +32,15 @@ const videoSchema = new mongoose.Schema(
 
 const blogSchema = new mongoose.Schema(
   {
+    slug: String,
     title: String,
     excerpt: String,
     body: String,
     date: String,
     image: String,
+    seoTitle: String,
+    seoDescription: String,
+    seoKeywords: String,
     published: { type: Boolean, default: true }
   },
   { _id: true }
@@ -53,6 +57,13 @@ const momentSchema = new mongoose.Schema(
 
 const siteContentSchema = new mongoose.Schema(
   {
+    seo: {
+      siteTitle: String,
+      metaTitle: String,
+      metaDescription: String,
+      keywords: String,
+      ogImage: String
+    },
     profile: profileSchema,
     stats: [statsSchema],
     services: [String],

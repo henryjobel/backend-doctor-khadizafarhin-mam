@@ -10,10 +10,11 @@ router.get("/", async (_req, res) => {
 });
 
 router.put("/", requireAuth, async (req, res) => {
+  const { _id, __v, createdAt, updatedAt, ...payload } = req.body;
   const existing = await SiteContent.findOne().sort({ createdAt: 1 });
   const content = existing
-    ? await SiteContent.findByIdAndUpdate(existing._id, req.body, { new: true })
-    : await SiteContent.create(req.body);
+    ? await SiteContent.findByIdAndUpdate(existing._id, payload, { new: true })
+    : await SiteContent.create(payload);
   res.json(content);
 });
 

@@ -4,6 +4,7 @@ import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 import { connectDB } from "./lib/db.js";
+import { bootstrapAppData } from "./lib/bootstrap.js";
 import authRoutes from "./routes/auth.js";
 import contentRoutes from "./routes/content.js";
 import appointmentRoutes from "./routes/appointments.js";
@@ -50,6 +51,7 @@ function getApiStatus() {
     service: "doctor-portfolio-api",
     message: "Backend is running. All API routes are available.",
     dbReady: app.locals.dbReady === true,
+    dbError: app.locals.dbError || null,
     cloudinaryReady: Boolean(process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET),
     allowedOrigins,
     routes: [
@@ -139,8 +141,14 @@ server.on("error", (error) => {
 connectDB()
   .then(() => {
     app.locals.dbReady = true;
+    app.locals.dbError = null;
+    return bootstrapAppData();
+  })
+  .then(() => {
+    console.log("Bootstrap complete");
   })
   .catch((error) => {
     app.locals.dbReady = false;
+    app.locals.dbError = error.message;
     console.warn(`MongoDB unavailable: ${error.message}`);
   });

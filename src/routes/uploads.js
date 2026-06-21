@@ -2,6 +2,7 @@ import express from "express";
 import multer from "multer";
 import path from "path";
 import { v2 as cloudinary } from "cloudinary";
+import { requireAuth } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -46,7 +47,7 @@ function uploadBuffer(file) {
   });
 }
 
-router.post("/image", upload.single("image"), async (req, res, next) => {
+router.post("/image", requireAuth, upload.single("image"), async (req, res, next) => {
   try {
     if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
       return res.status(503).json({ message: "Cloudinary is not configured" });
