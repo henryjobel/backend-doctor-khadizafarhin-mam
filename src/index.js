@@ -121,9 +121,23 @@ app.get("/api/health", (_req, res) => {
   res.json(getApiStatus());
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/content", contentRoutes);
-app.use("/api/appointments", appointmentRoutes);
+async function ensureDatabase(_req, res, next) {
+  try {
+    await connectDB();
+    await bootstrapAppData();
+    app.locals.dbReady = true;
+    app.locals.dbError = null;
+    next();
+  } catch (error) {
+    app.locals.dbReady = false;
+    app.locals.dbError = error.message;
+    res.status(503).json({ message: "Database is not connected. Check MONGODB_URI on the backend.", error: error.message });
+  }
+}
+
+app.use("/api/auth", ensureDatabase, authRoutes);
+app.use("/api/content", ensureDatabase, contentRoutes);
+app.use("/api/appointments", ensureDatabase, appointmentRoutes);
 app.use("/api/uploads", uploadRoutes);
 
 const server = app.listen(port, () => {
