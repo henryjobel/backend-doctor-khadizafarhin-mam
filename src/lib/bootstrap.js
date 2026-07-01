@@ -38,6 +38,7 @@ const initialContent = {
     "TVS & SIS Evaluation"
   ],
   videos: [{ title: "Fertility and reproductive health guidance", url: "https://www.youtube.com/embed/dQw4w9WgXcQ" }],
+  reels: [],
   blogs: [
     {
       slug: "when-couples-should-seek-infertility-consultation",
@@ -93,6 +94,9 @@ const initialContent = {
     portfolioEyebrow: "Portfolio",
     portfolioTitle: "Education, experience and specialist training",
     portfolioSubtitle: "A CV-based overview of Dr. Farhin's academic background, government service, private consultancy and fertility-focused clinical work.",
+    reelsEyebrow: "Short Health Tips",
+    reelsTitle: "Quick advice from Mam, one reel at a time",
+    reelsSubtitle: "Bite-sized guidance on fertility, pregnancy and women's health. Hover or tap a card to watch.",
     customSections: [
       {
         type: "cards",
@@ -237,10 +241,19 @@ export async function bootstrapAppData() {
         set["home.portfolioTitle"] = initialContent.home.portfolioTitle;
         set["home.portfolioSubtitle"] = initialContent.home.portfolioSubtitle;
       }
+      if (!exists.home.reelsTitle) {
+        set["home.reelsEyebrow"] = initialContent.home.reelsEyebrow;
+        set["home.reelsTitle"] = initialContent.home.reelsTitle;
+        set["home.reelsSubtitle"] = initialContent.home.reelsSubtitle;
+      }
     }
 
     if (!exists.portfolio) {
       set.portfolio = initialContent.portfolio;
+    }
+
+    if (!Array.isArray(exists.reels)) {
+      set.reels = initialContent.reels;
     }
 
     if (Object.keys(set).length > 0) {

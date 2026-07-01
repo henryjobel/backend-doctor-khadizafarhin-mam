@@ -55,6 +55,15 @@ const momentSchema = new mongoose.Schema(
   { _id: true }
 );
 
+const reelSchema = new mongoose.Schema(
+  {
+    title: String,
+    videoUrl: String,
+    thumbnail: String
+  },
+  { _id: true }
+);
+
 const homeSchema = new mongoose.Schema(
   {
     heroBadge: String,
@@ -77,6 +86,9 @@ const homeSchema = new mongoose.Schema(
     portfolioEyebrow: String,
     portfolioTitle: String,
     portfolioSubtitle: String,
+    reelsEyebrow: String,
+    reelsTitle: String,
+    reelsSubtitle: String,
     customSections: [
       {
         type: { type: String, default: "cards" },
@@ -133,6 +145,7 @@ const siteContentSchema = new mongoose.Schema(
     videos: [videoSchema],
     blogs: [blogSchema],
     moments: [momentSchema],
+    reels: [reelSchema],
     home: homeSchema,
     portfolio: portfolioSchema
   },
