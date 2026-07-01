@@ -1,11 +1,18 @@
 import express from "express";
 import { Appointment } from "../models/Appointment.js";
 import { requireAuth } from "../middleware/auth.js";
+import { getEarliestBookableDate } from "../lib/booking.js";
 
 const router = express.Router();
 
 router.post("/", async (req, res) => {
   try {
+    const earliest = getEarliestBookableDate();
+    if (req.body.date && req.body.date < earliest) {
+      return res.status(400).json({
+        message: `Same-day booking closes at 5:00 PM. The earliest available date is ${earliest}.`
+      });
+    }
     const appointment = await Appointment.create(req.body);
     res.status(201).json(appointment);
   } catch (error) {
