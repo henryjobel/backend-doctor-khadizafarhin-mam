@@ -64,6 +64,19 @@ const homeSchema = new mongoose.Schema(
     specialistItems: [String],
     aboutItems: [String],
     journeyItems: [String],
+    careMomentsEyebrow: String,
+    careMomentsTitle: String,
+    careMomentsSubtitle: String,
+    servicesEyebrow: String,
+    servicesTitle: String,
+    servicesSubtitle: String,
+    journeyEyebrow: String,
+    journeyTitle: String,
+    journeyBody: String,
+    aboutEyebrow: String,
+    portfolioEyebrow: String,
+    portfolioTitle: String,
+    portfolioSubtitle: String,
     customSections: [
       {
         type: { type: String, default: "cards" },
@@ -77,6 +90,30 @@ const homeSchema = new mongoose.Schema(
         enabled: { type: Boolean, default: true }
       }
     ]
+  },
+  { _id: false }
+);
+
+const portfolioSchema = new mongoose.Schema(
+  {
+    education: [
+      {
+        degree: String,
+        meta: String,
+        institute: String,
+        year: String
+      }
+    ],
+    experience: [
+      {
+        role: String,
+        place: String,
+        period: String
+      }
+    ],
+    specialistTraining: [String],
+    clinicalSkills: [String],
+    research: [String]
   },
   { _id: false }
 );
@@ -96,7 +133,8 @@ const siteContentSchema = new mongoose.Schema(
     videos: [videoSchema],
     blogs: [blogSchema],
     moments: [momentSchema],
-    home: homeSchema
+    home: homeSchema,
+    portfolio: portfolioSchema
   },
   { timestamps: true }
 );

@@ -80,6 +80,19 @@ const initialContent = {
       "PCOS, endometriosis and menstrual care",
       "Post-treatment and family follow-up"
     ],
+    careMomentsEyebrow: "Care Moments",
+    careMomentsTitle: "Real warmth from pregnancy, delivery and family care journeys",
+    careMomentsSubtitle: "A visual glimpse of the trust, comfort and continuity patients experience throughout consultation, treatment and follow-up.",
+    servicesEyebrow: "Services",
+    servicesTitle: "Specialized care for fertility, pregnancy and women's health",
+    servicesSubtitle: "Every care plan is explained clearly, with diagnostic guidance, treatment options and follow-up built into the patient journey.",
+    journeyEyebrow: "Why Patients Trust Her",
+    journeyTitle: "A calm, experienced doctor for sensitive women's health decisions",
+    journeyBody: "From infertility diagnosis to pregnancy care, every patient needs clarity, privacy and steady guidance. The experience is organized around careful listening, evidence-based decisions and ongoing communication.",
+    aboutEyebrow: "About Doctor",
+    portfolioEyebrow: "Portfolio",
+    portfolioTitle: "Education, experience and specialist training",
+    portfolioSubtitle: "A CV-based overview of Dr. Farhin's academic background, government service, private consultancy and fertility-focused clinical work.",
     customSections: [
       {
         type: "cards",
@@ -92,6 +105,80 @@ const initialContent = {
         items: ["Fertility consultation", "Pregnancy planning", "Gynecology follow-up"],
         enabled: true
       }
+    ]
+  },
+  portfolio: {
+    education: [
+      {
+        degree: "MBBS",
+        meta: "Bachelor of Medicine and Bachelor of Surgery",
+        institute: "Z H Sikder Women's Medical College & Hospital, Dhaka",
+        year: "1998-2003"
+      },
+      {
+        degree: "FCPS",
+        meta: "Obstetrics & Gynaecology",
+        institute: "Bangladesh College of Physicians & Surgeons (BCPS)",
+        year: "Since Jan 2015"
+      },
+      {
+        degree: "FCPS",
+        meta: "Reproductive Endocrinology & Infertility",
+        institute: "Bangladesh College of Physicians & Surgeons (BCPS)",
+        year: "Since Jan 2022"
+      }
+    ],
+    experience: [
+      {
+        role: "Medical Officer",
+        place: "Department of Reproductive Endocrinology & Infertility, Dhaka Medical College Hospital",
+        period: "December 2024 - Present"
+      },
+      {
+        role: "Consultant",
+        place: "Uttara Crescent Hospital, Reproductive Endocrinology & Infertility and Obs & Gynae",
+        period: "2016 - Present"
+      },
+      {
+        role: "Medical Officer",
+        place: "Obstetric and Gynae Department, Kurmitola General Hospital",
+        period: "March 2022 - December 2024"
+      },
+      {
+        role: "Post Graduate Trainee Doctor",
+        place: "Reproductive Endocrinology & Infertility, Dhaka Medical College Hospital",
+        period: "2018 - 2022"
+      },
+      {
+        role: "Medical Officer and Consultant Assistant",
+        place: "Obstetric and Gynae Department, Dhaka Medical College Hospital",
+        period: "2015 - 2018"
+      },
+      {
+        role: "Medical Officer and Consultant Assistant",
+        place: "Uttara Adhunik Medical Hospital, Dhaka",
+        period: "2007 - 2010"
+      }
+    ],
+    specialistTraining: [
+      "Laparoscopy, hysteroscopy, IUI, IVF, andrology, TVS and SIS training",
+      "Basic laparoscopy training from SELSB",
+      "Advanced laparoscopy and fertility sparing surgery workshops from OGSB",
+      "Hysteroscopy surgery workshop organized by OGSB",
+      "Basic Surgical Skill and Research Methodology from BCPS"
+    ],
+    clinicalSkills: [
+      "Female and male infertility evaluation",
+      "PCOS, endometriosis, adenomyosis and fibroid care",
+      "Obstetrics and gynecology surgery",
+      "Pain free vaginal delivery and VBAC guidance",
+      "Laparoscopy, hysteroscopy, TVS, IVF, SIS and IUI"
+    ],
+    research: [
+      "Semaglutide vs Metformin in infertile women with PCOS selected for ASPIRE 2025 poster presentation in Singapore",
+      "Semaglutide research selected for oral presentation by Fertility & Sterility Society of Bangladesh",
+      "Role of micronutrients in improving sperm count and concentration selected for OGSB poster presentation",
+      "Published and co-authored international research in gynecology, infertility and obstetrics"
     ]
   }
 };
@@ -118,10 +205,47 @@ export async function bootstrapAppData() {
   const exists = await SiteContent.findOne();
   if (!exists) {
     await SiteContent.create(initialContent);
-  } else if (!exists.home) {
-    await SiteContent.findByIdAndUpdate(exists._id, { $set: { home: initialContent.home } });
-  } else if (!Array.isArray(exists.home.customSections)) {
-    await SiteContent.findByIdAndUpdate(exists._id, { $set: { "home.customSections": initialContent.home.customSections } });
+  } else {
+    const set = {};
+
+    if (!exists.home) {
+      set.home = initialContent.home;
+    } else {
+      if (!Array.isArray(exists.home.customSections)) {
+        set["home.customSections"] = initialContent.home.customSections;
+      }
+      if (!exists.home.careMomentsTitle) {
+        set["home.careMomentsEyebrow"] = initialContent.home.careMomentsEyebrow;
+        set["home.careMomentsTitle"] = initialContent.home.careMomentsTitle;
+        set["home.careMomentsSubtitle"] = initialContent.home.careMomentsSubtitle;
+      }
+      if (!exists.home.servicesTitle) {
+        set["home.servicesEyebrow"] = initialContent.home.servicesEyebrow;
+        set["home.servicesTitle"] = initialContent.home.servicesTitle;
+        set["home.servicesSubtitle"] = initialContent.home.servicesSubtitle;
+      }
+      if (!exists.home.journeyTitle) {
+        set["home.journeyEyebrow"] = initialContent.home.journeyEyebrow;
+        set["home.journeyTitle"] = initialContent.home.journeyTitle;
+        set["home.journeyBody"] = initialContent.home.journeyBody;
+      }
+      if (!exists.home.aboutEyebrow) {
+        set["home.aboutEyebrow"] = initialContent.home.aboutEyebrow;
+      }
+      if (!exists.home.portfolioTitle) {
+        set["home.portfolioEyebrow"] = initialContent.home.portfolioEyebrow;
+        set["home.portfolioTitle"] = initialContent.home.portfolioTitle;
+        set["home.portfolioSubtitle"] = initialContent.home.portfolioSubtitle;
+      }
+    }
+
+    if (!exists.portfolio) {
+      set.portfolio = initialContent.portfolio;
+    }
+
+    if (Object.keys(set).length > 0) {
+      await SiteContent.findByIdAndUpdate(exists._id, { $set: set });
+    }
   }
 
   bootstrapped = true;
