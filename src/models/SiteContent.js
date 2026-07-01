@@ -55,6 +55,32 @@ const momentSchema = new mongoose.Schema(
   { _id: true }
 );
 
+const homeSchema = new mongoose.Schema(
+  {
+    heroBadge: String,
+    heroHeading: String,
+    experienceYears: String,
+    experienceLabel: String,
+    specialistItems: [String],
+    aboutItems: [String],
+    journeyItems: [String],
+    customSections: [
+      {
+        type: { type: String, default: "cards" },
+        eyebrow: String,
+        title: String,
+        body: String,
+        image: String,
+        ctaLabel: String,
+        ctaHref: String,
+        items: [String],
+        enabled: { type: Boolean, default: true }
+      }
+    ]
+  },
+  { _id: false }
+);
+
 const siteContentSchema = new mongoose.Schema(
   {
     seo: {
@@ -69,7 +95,8 @@ const siteContentSchema = new mongoose.Schema(
     services: [String],
     videos: [videoSchema],
     blogs: [blogSchema],
-    moments: [momentSchema]
+    moments: [momentSchema],
+    home: homeSchema
   },
   { timestamps: true }
 );
