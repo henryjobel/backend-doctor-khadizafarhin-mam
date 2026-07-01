@@ -8,3 +8,5 @@ npm-debug.log*
 *.log
 uploads/*
 !uploads/.gitkeep
+
+.vercel

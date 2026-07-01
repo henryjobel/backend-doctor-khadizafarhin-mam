@@ -24,6 +24,11 @@ router.get("/", requireAuth, async (_req, res) => {
 
 router.patch("/:id", requireAuth, async (req, res) => {
   try {
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).json({
+        message: "Request body was empty or not valid JSON. Check that the request was sent with Content-Type: application/json."
+      });
+    }
     const appointment = await Appointment.findByIdAndUpdate(
       req.params.id,
       req.body,

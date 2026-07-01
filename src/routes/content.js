@@ -16,6 +16,11 @@ router.get("/", async (_req, res) => {
 
 router.put("/", requireAuth, async (req, res) => {
   try {
+    if (!req.body || Object.keys(req.body).length === 0) {
+      return res.status(400).json({
+        message: "Request body was empty or not valid JSON. Check that the request was sent with Content-Type: application/json."
+      });
+    }
     const { _id, __v, createdAt, updatedAt, ...payload } = req.body;
     const existing = await SiteContent.findOne().sort({ createdAt: 1 });
     let content;

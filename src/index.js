@@ -113,6 +113,11 @@ app.get("/", (_req, res) => {
 </html>`);
 });
 
+app.use("/api", (_req, res, next) => {
+  res.set("Cache-Control", "no-store");
+  next();
+});
+
 app.get("/api", (_req, res) => {
   res.json(getApiStatus());
 });
